@@ -1,0 +1,50 @@
+Clojure wrapper for a SPARQL 1.1 parser written in Javascript, using an embedded V8 interpreter
+
+= Dependencies
+
+ - V8 Javascript engine, instructions to build and install can be found here: http://code.google.com/apis/v8/build.html
+ - A sample building command for OSX 64 bits generating a static lib is:
+
+ v8-read-only  $ scons mode=release library=static snapshot=on arch=x64
+
+= Building & running
+
+ 1) Build C++ dynamic lib
+
+ sparql-clj-v8-integration$ export CPLUS_INCLUDE_PATH=/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Headers/
+ sparql-clj-v8-integration$ make
+
+ 2) Build Java JNI wrapper
+
+ sparql-clj-v8-integration$ cd java
+ sparql-clj-v8-integration/java$ javac sparqltest/SparqlParser.java
+ sparql-clj-v8-integration/java$ jar cf SparqlParser.jar sparqltest/SparqlParser.class
+
+ 3) Set up Clojure project
+
+ sparql-clj-v8-integration/java$ cd ../clj-sparql-test
+ sparql-clj-v8-integration/clj-sparql-test$ lein deps
+ sparql-clj-v8-integration/clj-sparql-test$ cp ../js/sparql_parser.js .
+ sparql-clj-v8-integration/clj-sparql-test$ cp ../java/SparqlParser.jar ./lib/
+ sparql-clj-v8-integration/clj-sparql-test$ cp ./libSparqlParserWrapper.dylib .
+
+ 4) Test the library from Slime
+
+ sparql-clj-v8-integration/clj-sparql-test$ lein swank
+
+  user> (use 'clj-sparql-test.core)
+  nil
+  user> (parse-sparql "SELECT * { ?s ?p ?o }")
+  [{:token "prologue",
+    :base "",
+    :prefixes []}
+   {:kind "select",
+    :token "executableunit",
+    :dataset [],
+    :projection [{:token "variable", :kind "*"}],
+    :pattern {:token "groupgraphpattern",
+              :patterns [{:token "basicgraphpattern",
+                          :triplesContext [{:subject {:token "var", :value "s"},
+                                            :predicate {:token "var", :value "p"},
+                                            :object {:token "var", :value "o"}}]}],
+                          :filters []}}]
