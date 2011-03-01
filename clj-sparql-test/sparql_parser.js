@@ -13597,5 +13597,11 @@ sparql_parser = (function(){
 })();
 
 sparql_query = function(query) {
-    return JSON.stringify(sparql_parser.parse(query));
+    var result = "";
+    try{
+        result = JSON.stringify(sparql_parser.parse(query));
+    } catch (err) {
+        result = err.message;
+    }
+    return result;
 };
