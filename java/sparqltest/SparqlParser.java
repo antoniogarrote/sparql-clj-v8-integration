@@ -5,27 +5,15 @@ public class SparqlParser {
          System.loadLibrary("SparqlParserWrapper");
      }
 
-    private native void init();
     private native String parse_query(String query);
 
-    private static SparqlParser parser;
-
-    private SparqlParser() {
-        init();
-    }
-
-    public String _parse(String query){
-        return parse_query(query);
-    }
-
     public static String parse(String query) {
-        if(parser == null) {
-            parser = new SparqlParser();
-        }
-        return parser._parse(query);
+        return (new SparqlParser()).parse_query(query);
     }
 
     public static void main(String[] argv) {
-        System.out.println("RESULT: "+SparqlParser.parse("SELECT * { ?s ?p ?o }"));
+        String query = "BASE <a> PREFIX test: <b> INSERT DATA { <a> <b> \"c\" }";
+        System.out.println("QUERY BEFORE:"+query);
+        System.out.println("RESULT: "+SparqlParser.parse(query));
     }
  }

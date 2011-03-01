@@ -7,13 +7,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*
- * Class:     sparqltest_SparqlParser
- * Method:    init
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_sparqltest_SparqlParser_init
-  (JNIEnv *, jobject);
 
 /*
  * Class:     sparqltest_SparqlParser

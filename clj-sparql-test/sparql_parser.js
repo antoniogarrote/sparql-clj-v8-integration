@@ -127,39 +127,47 @@ sparql_parser = (function(){
         var savedReportMatchFailures = context.reportMatchFailures;
         context.reportMatchFailures = false;
         var savedPos0 = pos;
-        var result1 = parse_Prologue(context);
-        if (result1 !== null) {
-          var result6 = parse_SelectQuery(context);
-          if (result6 !== null) {
-            var result2 = result6;
+        var result2 = parse_Prologue(context);
+        if (result2 !== null) {
+          var result7 = parse_SelectQuery(context);
+          if (result7 !== null) {
+            var result3 = result7;
           } else {
-            var result5 = parse_ConstructQuery(context);
-            if (result5 !== null) {
-              var result2 = result5;
+            var result6 = parse_ConstructQuery(context);
+            if (result6 !== null) {
+              var result3 = result6;
             } else {
-              var result4 = parse_DescribeQuery(context);
-              if (result4 !== null) {
-                var result2 = result4;
+              var result5 = parse_DescribeQuery(context);
+              if (result5 !== null) {
+                var result3 = result5;
               } else {
-                var result3 = parse_AskQuery(context);
-                if (result3 !== null) {
-                  var result2 = result3;
+                var result4 = parse_AskQuery(context);
+                if (result4 !== null) {
+                  var result3 = result4;
                 } else {
-                  var result2 = null;;
+                  var result3 = null;;
                 };
               };
             };
           }
-          if (result2 !== null) {
-            var result0 = [result1, result2];
+          if (result3 !== null) {
+            var result1 = [result2, result3];
           } else {
-            var result0 = null;
+            var result1 = null;
             pos = savedPos0;
           }
         } else {
-          var result0 = null;
+          var result1 = null;
           pos = savedPos0;
         }
+        var result0 = result1 !== null
+          ? (function(p, q) {
+                return {token: 'query',
+                        kind: 'query',
+                        prologue: p,
+                        units: [q]};
+          })(result1[0], result1[1])
+          : null;
         context.reportMatchFailures = savedReportMatchFailures;
         if (context.reportMatchFailures && result0 === null) {
           matchFailed("[2] Query");
@@ -6936,21 +6944,16 @@ sparql_parser = (function(){
 
         var savedReportMatchFailures = context.reportMatchFailures;
         context.reportMatchFailures = false;
-        var result4 = parse_Collection(context);
-        var result3 = result4 !== null
+        var result3 = parse_Collection(context);
+        var result2 = result3 !== null
           ? (function() {
                 return {token:"triplesnode", triplesContext:[], chainSubject:"todo"}
           })()
           : null;
-        if (result3 !== null) {
-          var result0 = result3;
+        if (result2 !== null) {
+          var result0 = result2;
         } else {
-          var result2 = parse_BlankNodePropertyList(context);
-          var result1 = result2 !== null
-            ? (function() {
-                  return {token:"triplesnode", triplesContext:[], chainSubject:"todo"}
-            })()
-            : null;
+          var result1 = parse_BlankNodePropertyList(context);
           if (result1 !== null) {
             var result0 = result1;
           } else {
@@ -6980,41 +6983,107 @@ sparql_parser = (function(){
         var savedReportMatchFailures = context.reportMatchFailures;
         context.reportMatchFailures = false;
         var savedPos0 = pos;
-        if (input.substr(pos, 1) === "[") {
-          var result1 = "[";
-          pos += 1;
-        } else {
-          var result1 = null;
-          if (context.reportMatchFailures) {
-            matchFailed(quoteString("["));
-          }
+        var result2 = [];
+        var result12 = parse_WS(context);
+        while (result12 !== null) {
+          result2.push(result12);
+          var result12 = parse_WS(context);
         }
-        if (result1 !== null) {
-          var result2 = parse_PropertyListNotEmpty(context);
-          if (result2 !== null) {
-            if (input.substr(pos, 1) === "]") {
-              var result3 = "]";
-              pos += 1;
-            } else {
-              var result3 = null;
-              if (context.reportMatchFailures) {
-                matchFailed(quoteString("]"));
-              }
+        if (result2 !== null) {
+          if (input.substr(pos, 1) === "[") {
+            var result3 = "[";
+            pos += 1;
+          } else {
+            var result3 = null;
+            if (context.reportMatchFailures) {
+              matchFailed(quoteString("["));
             }
-            if (result3 !== null) {
-              var result0 = [result1, result2, result3];
+          }
+          if (result3 !== null) {
+            var result4 = [];
+            var result11 = parse_WS(context);
+            while (result11 !== null) {
+              result4.push(result11);
+              var result11 = parse_WS(context);
+            }
+            if (result4 !== null) {
+              var result5 = parse_PropertyListNotEmpty(context);
+              if (result5 !== null) {
+                var result6 = [];
+                var result10 = parse_WS(context);
+                while (result10 !== null) {
+                  result6.push(result10);
+                  var result10 = parse_WS(context);
+                }
+                if (result6 !== null) {
+                  if (input.substr(pos, 1) === "]") {
+                    var result7 = "]";
+                    pos += 1;
+                  } else {
+                    var result7 = null;
+                    if (context.reportMatchFailures) {
+                      matchFailed(quoteString("]"));
+                    }
+                  }
+                  if (result7 !== null) {
+                    var result8 = [];
+                    var result9 = parse_WS(context);
+                    while (result9 !== null) {
+                      result8.push(result9);
+                      var result9 = parse_WS(context);
+                    }
+                    if (result8 !== null) {
+                      var result1 = [result2, result3, result4, result5, result6, result7, result8];
+                    } else {
+                      var result1 = null;
+                      pos = savedPos0;
+                    }
+                  } else {
+                    var result1 = null;
+                    pos = savedPos0;
+                  }
+                } else {
+                  var result1 = null;
+                  pos = savedPos0;
+                }
+              } else {
+                var result1 = null;
+                pos = savedPos0;
+              }
             } else {
-              var result0 = null;
+              var result1 = null;
               pos = savedPos0;
             }
           } else {
-            var result0 = null;
+            var result1 = null;
             pos = savedPos0;
           }
         } else {
-          var result0 = null;
+          var result1 = null;
           pos = savedPos0;
         }
+        var result0 = result1 !== null
+          ? (function(pl) {
+
+                GlobalBlankNodeCounter++;
+                var subject = {token:'blank', label:''+GlobalBlankNodeCounter};
+                var newTriples =  [];
+
+                for(var i=0; i< pl.pairs.length; i++) {
+                    var pair = pl.pairs[i];
+                    var triple = {}
+                    triple.subject = subject;
+                    triple.predicate = pair[0];
+                    triple.object = pair[1];
+                    newTriples.push(triple);
+                }
+
+                return {token: 'triplesnode',
+                        kind: 'blanknodepropertylist',
+                        triplesContext: pl.triplesContext.concat(newTriples),
+                        chainSubject: subject};
+          })(result1[3])
+          : null;
         context.reportMatchFailures = savedReportMatchFailures;
         if (context.reportMatchFailures && result0 === null) {
           matchFailed("[88] BlankNodePropertyList");
@@ -7038,38 +7107,82 @@ sparql_parser = (function(){
         var savedReportMatchFailures = context.reportMatchFailures;
         context.reportMatchFailures = false;
         var savedPos0 = pos;
-        if (input.substr(pos, 1) === "(") {
-          var result1 = "(";
-          pos += 1;
-        } else {
-          var result1 = null;
-          if (context.reportMatchFailures) {
-            matchFailed(quoteString("("));
-          }
+        var result1 = [];
+        var result12 = parse_WS(context);
+        while (result12 !== null) {
+          result1.push(result12);
+          var result12 = parse_WS(context);
         }
         if (result1 !== null) {
-          var result4 = parse_GraphNode(context);
-          if (result4 !== null) {
-            var result2 = [];
-            while (result4 !== null) {
-              result2.push(result4);
-              var result4 = parse_GraphNode(context);
-            }
+          if (input.substr(pos, 1) === "(") {
+            var result2 = "(";
+            pos += 1;
           } else {
             var result2 = null;
+            if (context.reportMatchFailures) {
+              matchFailed(quoteString("("));
+            }
           }
           if (result2 !== null) {
-            if (input.substr(pos, 1) === ")") {
-              var result3 = ")";
-              pos += 1;
-            } else {
-              var result3 = null;
-              if (context.reportMatchFailures) {
-                matchFailed(quoteString(")"));
-              }
+            var result3 = [];
+            var result11 = parse_WS(context);
+            while (result11 !== null) {
+              result3.push(result11);
+              var result11 = parse_WS(context);
             }
             if (result3 !== null) {
-              var result0 = [result1, result2, result3];
+              var result10 = parse_GraphNode(context);
+              if (result10 !== null) {
+                var result4 = [];
+                while (result10 !== null) {
+                  result4.push(result10);
+                  var result10 = parse_GraphNode(context);
+                }
+              } else {
+                var result4 = null;
+              }
+              if (result4 !== null) {
+                var result5 = [];
+                var result9 = parse_WS(context);
+                while (result9 !== null) {
+                  result5.push(result9);
+                  var result9 = parse_WS(context);
+                }
+                if (result5 !== null) {
+                  if (input.substr(pos, 1) === ")") {
+                    var result6 = ")";
+                    pos += 1;
+                  } else {
+                    var result6 = null;
+                    if (context.reportMatchFailures) {
+                      matchFailed(quoteString(")"));
+                    }
+                  }
+                  if (result6 !== null) {
+                    var result7 = [];
+                    var result8 = parse_WS(context);
+                    while (result8 !== null) {
+                      result7.push(result8);
+                      var result8 = parse_WS(context);
+                    }
+                    if (result7 !== null) {
+                      var result0 = [result1, result2, result3, result4, result5, result6, result7];
+                    } else {
+                      var result0 = null;
+                      pos = savedPos0;
+                    }
+                  } else {
+                    var result0 = null;
+                    pos = savedPos0;
+                  }
+                } else {
+                  var result0 = null;
+                  pos = savedPos0;
+                }
+              } else {
+                var result0 = null;
+                pos = savedPos0;
+              }
             } else {
               var result0 = null;
               pos = savedPos0;
